@@ -9,21 +9,30 @@ import pandas as pd
 import seaborn as sb
 import matplotlib.pyplot as plt
 import numpy as np
+from time import sleep
 
 PAIR_NAME = "XBTUSD"
 BUCKET_URL = "https://www.bitmex.com/api/v1/trade/bucketed?"
 BIN_SIZE = "1m"
-START_DATE = datetime(2019, 10, 26)
+START_DATE = datetime(2019, 10, 20)
 
 # Set Column Names
 
 
 # Get Data from Bitmex
 def getData(count, startTime, endTime):
-    url = f"{BUCKET_URL}binSize={BIN_SIZE}&partial=false&symbol={PAIR_NAME}&reverse=true&startTime={startTime}&endTime={endTime}&count={count}"
-    response = requests.get(url).json()
     df = pd.DataFrame(columns=["T", "TF", "O", "H", "C", "L", "V", "VWAP"])
+    url = f"{BUCKET_URL}binSize={BIN_SIZE}&partial=false&symbol={PAIR_NAME}&reverse=true&startTime={startTime}&endTime={endTime}&count={count}"
     print(url)
+
+    try:
+        response = requests.get(url).json()
+
+    except:
+        return df
+
+    if response is None:
+        return df
 
     for i in range(len(response)):
         try:
@@ -45,13 +54,13 @@ def getData(count, startTime, endTime):
                             "VWAP": vwap
                             }, ignore_index=True)
         # print(f"{time} >> {openprice:.2f} | {closeprice:.2f} | {highprice:.2f} | {lowprice:.2f} | {vwap:.2f} | {volume:.2f}")
-        except expression as identifier:
+        except:
             pass
 
     return df
 
 
-def startRequest(minutes=60):
+def startRequest(minutes=500):
 
     endTime = datetime.utcnow()
     startTime = datetime.utcnow() - timedelta(minutes=minutes)
@@ -63,8 +72,10 @@ def startRequest(minutes=60):
         df = pd.concat([df, dd], axis=0, sort=False)
         endTime = startTime
         startTime -= timedelta(minutes=minutes)
+        sleep(2)
         # print(dd.head())
     df.sort_values("T", axis=0, ascending=True, inplace=True)
+    df.drop_duplicates(subset='T', keep=False, inplace=True)
     df.to_csv("test.csv", index=False, sep=";")
 
 
