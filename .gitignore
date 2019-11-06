@@ -1,10 +1,2 @@
-data/test.csv
-data/test - Kopya.csv
-data/indicators.csv
-data/indicators_light.csv
-data/indicators_light_1m.csv
-data/alldata.csv
-Bitmex/bitmexLib/__pycache__/__init__.cpython-37.pyc
-data/test_scaled.csv
-Bitmex/bitmexLib/__pycache__/bitmexEnvironment.cpython-37.pyc
-Bitmex/bitmexLib/__pycache__/binanceEnvironment.cpython-37.pyc
+data/*
+Bitmex/bitmexLib/__pycache__/*
