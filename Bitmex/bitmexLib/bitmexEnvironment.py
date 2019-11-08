@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import gym
 import matplotlib.pyplot as plt
+import time
 
 
 class bitmexEnvironment(gym.Env):
@@ -42,12 +43,11 @@ class bitmexEnvironment(gym.Env):
         self.state_size = len(self.data_features) + 1
         self.df = pd.read_csv(file_name, sep=";")
         self.data_len = self.df.shape[0]
-        print(self.data_len)
         self.sim_len = self.data_len
         self.input_shape = self.__get_state().shape
         self.observation_space = self.__get_state()
         self.trade_cost = trade_cost
-        # print('init')
+        # print(self.observation_space)
         return
 
     def getActions(self):
@@ -152,8 +152,11 @@ class bitmexEnvironment(gym.Env):
         self.trades = 0
         self.episode = self.episode + 1  # increment episode number
         self.current_index = 0
+        #self.df.to_csv(f"results_{time.time()}.csv", index=False, sep=";")
         self.df['action'] = 0  # reset action history
         self.df['profit'] = 0  # reset profit history
+        self.buyActions = 0
+        self.sellActions = 0
         # print('reset')
         return self.__get_state()
 
