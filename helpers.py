@@ -5,6 +5,7 @@ import gym
 import random
 import matplotlib.pyplot as plt
 import pandas as pd
+import os.path
 
 
 def createBins():
@@ -40,8 +41,8 @@ def printColumnsMinMax(df):
         print(c, ' Min : ', df[c].min(), ' Max : ', df[c].max())
 
 
-def scaleData(df, colName):
-    #colName = "V_Scaled"
+def reshapeColumnData(df, colName):
+    # colName = "V_Scaled"
 
     myData = df[colName].values
     scaled = myData.reshape(1, -1)
@@ -55,10 +56,24 @@ def minMaxScale(scaledData):
     return scaled
 
 
-def scaleData(df, data, colName):
+def scaleColumnData(df, data, colName):
     scaled = preprocessing.scale(data)
     df[f"{colName}_Scaled"] = scaled
     return df
+
+
+def scaleTest(data):
+    scalerfile = "scaler.sav"
+
+    # if os.path.isfile(scalerfile):
+    #     joblib.load(scaler, scalerfile)
+    # else:
+    scaler = preprocessing.MinMaxScaler(feature_range=(0, 1))
+    #joblib.dump(scaler, scalerfile)
+    #shaped = data.reshape(1, -1)
+    scaled = scaler.fit_transform(data)
+
+    print(scaled)
 
 
 def saveCsv(df):
@@ -70,3 +85,9 @@ def plotData(data):
     # print(scaled.shape)
     plt.plot(data)
     plt.show()
+
+
+data1 = np.array([[0.8, 0.5]])
+data2 = np.array([[1000, 5000, 10000.0]])
+scaleTest(data1)
+scaleTest(data2)
