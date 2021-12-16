@@ -98,10 +98,10 @@ def singleCoin(timeFrameId):
     #df['price_ichimoku_diff_b_IsUp'] = (df['price_ichimoku_diff_b'].diff() > 0).astype(bool)
     #print('Single Coin', df['price_ichimoku_diff_a'] ,df['price_ichimoku_diff_a_IsUp'])    
     #plotChart(df, coinName)
-    print(df["AO_IsUp"])
+    
     #df.to_csv("11test.csv")
     # plotMacdChart(df)
-    #sendIndicator(coinId, coinName, df, timeFrameId)
+    sendIndicator(coinId, coinName, df, timeFrameId)
 
 
 def test():
@@ -313,7 +313,9 @@ def sendIndicator(coinId, coinName, df, timeFrameId):
         'PriceIchimokuDiffAIsUp':lastRow['price_ichimoku_diff_a_IsUp'],
 
         'PriceIchimokuDiffB' :lastRow['price_ichimoku_diff_b']  ,
-        'PriceIchimokuDiffBIsUp':lastRow['price_ichimoku_diff_b_IsUp']
+        'PriceIchimokuDiffBIsUp':lastRow['price_ichimoku_diff_b_IsUp'],
+        'AO' : lastRow["AO"],
+        'AO_IsUp' : lastRow["AO_IsUp"]
     }
     requests.post(INDICATOR_URL, data)
 
